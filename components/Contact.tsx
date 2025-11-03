@@ -16,13 +16,31 @@ const Contact = () => {
     }));
   };
 
+  const encode = (data: { [key: string]: string }) => {
+    return Object.keys(data)
+        .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+        .join("&");
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Here you would typically handle form submission, e.g., send to an API
-    console.log('Form submitted:', formData);
-    setFormStatus('پیام شما با موفقیت ارسال شد!');
-    setFormData({ name: '', phone: '', message: '' });
-    setTimeout(() => setFormStatus(''), 3000);
+    
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({ "form-name": "contact", ...formData })
+    })
+      .then(() => {
+        setFormStatus('پیام شما با موفقیت ارسال شد!');
+        setFormData({ name: '', phone: '', message: '' });
+      })
+      .catch(error => {
+        setFormStatus('خطا در ارسال پیام. لطفاً دوباره تلاش کنید.');
+        console.error(error);
+      })
+      .finally(() => {
+         setTimeout(() => setFormStatus(''), 3000);
+      });
   };
 
   return (
@@ -76,7 +94,8 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="bg-white p-8 rounded-2xl shadow-lg animate-on-scroll" style={{ transitionDelay: '400ms' }}>
             <h3 className="text-2xl font-bold text-secondary mb-6">فرم درخواست مشاوره</h3>
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form name="contact" method="POST" data-netlify="true" onSubmit={handleSubmit} className="space-y-5">
+              <input type="hidden" name="form-name" value="contact" />
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">نام و نام خانوادگی</label>
                 <input
@@ -123,7 +142,7 @@ const Contact = () => {
                   ارسال درخواست
                 </button>
               </div>
-              {formStatus && <p className="text-center text-green-600 font-semibold">{formStatus}</p>}
+              {formStatus && <p className="text-center text-green-600 font-semibold mt-4">{formStatus}</p>}
             </form>
           </div>
         </div>
