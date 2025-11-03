@@ -7,6 +7,8 @@ const Contact = () => {
     message: '',
   });
   const [formStatus, setFormStatus] = useState('');
+  const [copyStatus, setCopyStatus] = useState('');
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -42,6 +44,12 @@ const Contact = () => {
          setTimeout(() => setFormStatus(''), 3000);
       });
   };
+  
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text.replace(/[- ]/g, ''));
+    setCopyStatus('کپی شد!');
+    setTimeout(() => setCopyStatus(''), 2000);
+  };
 
   return (
     <section id="contact" className="py-20 bg-background">
@@ -66,83 +74,90 @@ const Contact = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-secondary">شماره تماس</h3>
                   <p className="text-slate-600">پشتیبانی و فروش:</p>
-                  <a href="tel:+982112345678" className="text-lg font-bold text-primary hover:underline" dir="ltr">۰۲۱-۱۲۳۴۵۶۷۸</a>
+                  <a href="tel:+989910413781" onClick={() => handleCopy('09910413781')} className="text-lg font-bold text-primary hover:underline relative" dir="ltr">
+                    ۰۹۹۱-۰۴۱۳۷۸۱
+                    {copyStatus && <span className="absolute -top-7 right-0 text-xs bg-secondary text-white px-2 py-1 rounded">{copyStatus}</span>}
+                  </a>
                 </div>
               </div>
-              <div className="flex items-start space-x-4 space-x-reverse">
-                 <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                 </div>
-                 <div>
-                   <h3 className="text-xl font-semibold text-secondary">آدرس دفتر مرکزی</h3>
-                   <p className="text-slate-600">تهران، خیابان ولیعصر، بالاتر از پارک ساعی، پلاک ۱۲۳۴، واحد ۵</p>
-                 </div>
-              </div>
                <div className="flex items-start space-x-4 space-x-reverse">
-                 <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-                 </div>
-                 <div>
-                   <h3 className="text-xl font-semibold text-secondary">ایمیل</h3>
-                   <p className="text-slate-600">برای سوالات عمومی و همکاری:</p>
-                   <a href="mailto:info@wallfix.com" className="text-lg font-bold text-primary hover:underline">info@wallfix.com</a>
-                 </div>
+                <div className="flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-secondary">ساعات کاری</h3>
+                  <p className="text-slate-600">شنبه تا پنج‌شنبه</p>
+                  <p className="text-lg font-bold text-slate-800">۱۰ صبح الی ۸ شب</p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-2xl shadow-lg animate-on-scroll" style={{ transitionDelay: '400ms' }}>
-            <h3 className="text-2xl font-bold text-secondary mb-6">فرم درخواست مشاوره</h3>
-            <form name="contact" method="POST" data-netlify="true" onSubmit={handleSubmit} className="space-y-5">
+          <div className="animate-on-scroll" style={{ transitionDelay: '400ms' }}>
+            <form 
+              name="contact"
+              data-netlify="true"
+              onSubmit={handleSubmit}
+              className="space-y-5 rounded-xl bg-white p-8 shadow-lg"
+            >
               <input type="hidden" name="form-name" value="contact" />
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">نام و نام خانوادگی</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
-                  placeholder="مثال: علی رضایی"
-                />
+                <label htmlFor="name" className="block text-sm font-medium text-secondary">نام شما</label>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
+                    placeholder="مثال: علی محمدی"
+                  />
+                </div>
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">شماره تماس</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
-                  placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹"
-                />
+                <label htmlFor="phone" className="block text-sm font-medium text-secondary">شماره تماس</label>
+                <div className="mt-1">
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
+                    placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹"
+                  />
+                </div>
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1">پیام شما (اختیاری)</label>
-                <textarea
-                  name="message"
-                  id="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
-                  placeholder="متراژ پروژه، نوع کاغذ دیواری و هر سوال دیگری که دارید را بنویسید..."
-                ></textarea>
+                <label htmlFor="message" className="block text-sm font-medium text-secondary">پیام شما</label>
+                <div className="mt-1">
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-3"
+                    placeholder="درخواست مشاوره یا سوال خود را اینجا بنویسید..."
+                  ></textarea>
+                </div>
               </div>
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-bold text-white bg-primary hover:bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                  className="w-full inline-flex items-center justify-center rounded-lg bg-primary px-8 py-3.5 text-base font-bold text-white shadow-lg transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   ارسال درخواست
                 </button>
               </div>
-              {formStatus && <p className="text-center text-green-600 font-semibold mt-4">{formStatus}</p>}
+              {formStatus && (
+                <p className="text-center font-semibold text-green-600">{formStatus}</p>
+              )}
             </form>
           </div>
         </div>
