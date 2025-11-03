@@ -19,7 +19,7 @@ const Footer = () => {
           {/* Telegram Button */}
           <div className="mt-8">
             <a 
-              href="#" // TODO: Replace with your actual Telegram channel link
+              href="https://t.me/Wall_Fix" // TODO: Replace with your actual Telegram channel link
               target="_blank" 
               rel="noopener noreferrer" 
               className="inline-flex items-center justify-center gap-3 rounded-lg bg-sky-500 px-6 py-3 text-base font-bold text-white shadow-lg transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:ring-offset-secondary"
